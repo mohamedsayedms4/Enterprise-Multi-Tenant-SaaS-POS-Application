@@ -17,6 +17,9 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 
+jwt:
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER:example.com}
 
 logging:
   level:
