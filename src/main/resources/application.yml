@@ -2,6 +2,10 @@ spring:
   application:
     name: Enterprise-Multi-Tenant-SaaS-POS-Application
 
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}

@@ -1,36 +1,28 @@
-package org.example.enterprisemultitenantsaasposapplication.model;
+package org.example.enterprisemultitenantsaasposapplication.payload.request;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.enterprisemultitenantsaasposapplication.domain.UserRole;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "users")
-public class User {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private UserRole role;
 
-    @Column(nullable = false)
     private boolean enabled = true;
 
     private String phone;

@@ -19,14 +19,18 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-
 @Component
 public class JwtValidator extends OncePerRequestFilter {
 
     private final SecretKey key;
+    private final String issuer;
 
-    public JwtValidator(@Value("${jwt.secret}") String secret) {
+    public JwtValidator(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.issuer}") String issuer
+    ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.issuer = issuer;
     }
 
     @Override
@@ -48,17 +52,18 @@ public class JwtValidator extends OncePerRequestFilter {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(key)
+                    .requireIssuer(issuer)
                     .build()
                     .parseSignedClaims(jwt)
                     .getPayload();
 
-            String email = claims.get("email", String.class);
+            String email = claims.getSubject();
             String authorities = claims.get("authorities", String.class);
 
             var auth = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
-                    AuthorityUtils.commaSeparatedStringToAuthorityList(authorities)
+                    AuthorityUtils.commaSeparatedStringToAuthorityList(authorities == null ? "" : authorities)
             );
 
             SecurityContextHolder.getContext().setAuthentication(auth);
